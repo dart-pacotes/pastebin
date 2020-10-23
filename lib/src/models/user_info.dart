@@ -5,11 +5,11 @@ import 'models.dart';
 class UserInfo {
   final String userName;
 
-  final Format formatShort;
+  final Format format;
 
   final ExpireDate expiration;
 
-  final String avatarUrl;
+  final Uri avatarUrl;
 
   final Visibility visibility;
 
@@ -25,7 +25,7 @@ class UserInfo {
     @required this.avatarUrl,
     @required this.email,
     @required this.expiration,
-    @required this.formatShort,
+    @required this.format,
     @required this.isPro,
     @required this.location,
     @required this.userName,
