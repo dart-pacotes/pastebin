@@ -11,6 +11,18 @@ extension VisibilityExtension on Visibility {
     Visibility.private: '2',
   };
 
+  static Visibility parse(
+    final String visibility,
+    final MapEntry<Visibility, String> Function() onError,
+  ) {
+    return values.entries
+        .firstWhere((entry) => entry.value == visibility, orElse: onError)
+        .key;
+  }
+
+  static Visibility tryParse(final String visibility) =>
+      parse(visibility, () => null);
+
   String value() {
     return values[this];
   }
