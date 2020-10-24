@@ -513,6 +513,17 @@ extension FormatExtension on Format {
     Format.zxbasic: 'zxbasic',
   };
 
+  static Format parse(
+    final String format,
+    final MapEntry<Format, String> Function() onError,
+  ) {
+    return values.entries
+        .firstWhere((entry) => entry.value == format, orElse: onError)
+        .key;
+  }
+
+  static Format tryParse(final String format) => parse(format, () => null);
+
   String value() {
     return values[this];
   }
