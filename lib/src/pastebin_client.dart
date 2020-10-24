@@ -4,7 +4,7 @@ import 'package:meta/meta.dart';
 import 'models/models.dart';
 
 abstract class PastebinClient {
-  Future<Either<void, RequestError>> paste({
+  Future<Either<Uri, RequestError>> paste({
     @required final String pasteText,
     final PasteOptions options,
   });

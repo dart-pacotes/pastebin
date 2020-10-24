@@ -57,7 +57,7 @@ class OfficialPastebinClient extends PastebinClient {
   }
 
   @override
-  Future<Either<void, RequestError>> paste({
+  Future<Either<Uri, RequestError>> paste({
     @required final String pasteText,
     final PasteOptions options,
   }) async {
@@ -79,9 +79,14 @@ class OfficialPastebinClient extends PastebinClient {
 
     body.removeWhere((k, v) => v == null);
 
-    return apiRequest(
+    final response = await apiRequest(
       body: body,
       apiOption: ApiOption.paste,
+    );
+
+    return response.fold(
+      (l) => Left(Uri.parse(l.body)),
+      (r) => Right(r),
     );
   }
 
@@ -178,7 +183,7 @@ class OfficialPastebinClient extends PastebinClient {
         ...body
       };
 
-      var response;
+      http.Response response;
 
       if (apiOption == ApiOption.rawPaste) {
         response = await _httpClient.get('$url/${body['api_paste_key']}');
