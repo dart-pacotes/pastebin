@@ -76,12 +76,23 @@ class InvalidParameters extends RequestError {}
 
 ///
 /// Corresponds to API response 'Bad API request, invalid permission to view
-/// this paste or invalid api_paste_key'
+/// this paste or invalid api_paste_key' or 'Bad API request,
+/// invalid permission to remove paste'
 ///
 class InsufficientPermissions extends RequestError {}
 
 ///
-/// Occurs when an error occurs in the connection between the client
-/// and the Pastebin API Server
+/// Corresponds to API response 'Bad API request, use POST request, not GET'
+///
+class InvalidRequestVerb extends RequestError {}
+
+///
+/// Occurs when the connection between the client and the
+/// Pastebin API Server fails
 ///
 class NetworkError extends RequestError {}
+
+///
+/// Occurs when the response status code is 404; Not Found
+///
+class NotFound extends RequestError {}
