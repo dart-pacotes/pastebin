@@ -21,6 +21,18 @@ extension ExpireDateExtension on ExpireDate {
     ExpireDate.oneYear: '1Y',
   };
 
+  static ExpireDate parse(
+    final String expireDate,
+    final MapEntry<ExpireDate, String> Function() onError,
+  ) {
+    return values.entries
+        .firstWhere((entry) => entry.value == expireDate, orElse: onError)
+        .key;
+  }
+
+  static ExpireDate tryParse(final String expireDate) =>
+      parse(expireDate, () => null);
+
   String value() {
     return values[this];
   }
