@@ -15,11 +15,13 @@ abstract class PastebinClient {
   });
 
   Future<Either<List<Paste>, RequestError>> pastes({
+    final String userKey,
     final int limit = 50,
   });
 
   Future<Either<void, RequestError>> delete({
     @required final String pasteKey,
+    @required final String userKey,
   });
 
   Future<Either<UserInfo, RequestError>> userInfo({
@@ -29,5 +31,6 @@ abstract class PastebinClient {
   Future<Either<String, RequestError>> rawPaste({
     @required final String pasteKey,
     @required final Visibility visibility,
+    final String userKey,
   });
 }
