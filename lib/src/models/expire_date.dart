@@ -1,3 +1,6 @@
+///
+/// Possible values for expiration dates of a Pastebin [Paste]
+///
 enum ExpireDate {
   never,
   tenMinutes,

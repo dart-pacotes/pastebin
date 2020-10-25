@@ -3,6 +3,9 @@ import 'package:xml/xml.dart';
 
 import 'models.dart';
 
+///
+/// Models a Pastebin paste
+///
 class Paste {
   final String key;
 

@@ -1,3 +1,6 @@
+///
+/// Possible values for format of a Pastebin [Paste]
+///
 enum Format {
   cs4,
   acme6502,

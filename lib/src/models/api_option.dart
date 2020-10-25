@@ -1,3 +1,6 @@
+///
+/// Options available in Pastebin API
+///
 enum ApiOption {
   paste,
   newUserKey,

@@ -3,6 +3,9 @@ import 'package:xml/xml.dart';
 
 import 'models.dart';
 
+///
+/// Models the information and settings of Pastebin user
+///
 class UserInfo {
   final String userName;
 

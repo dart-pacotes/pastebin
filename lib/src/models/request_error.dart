@@ -1,3 +1,6 @@
+///
+/// Base type for an error that can occur when consuming the Pastebin API
+///
 abstract class RequestError {}
 
 ///

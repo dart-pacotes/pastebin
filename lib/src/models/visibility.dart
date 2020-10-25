@@ -1,3 +1,6 @@
+///
+/// Possible values for the visibility of a Pastebin [Paste]
+///
 enum Visibility {
   public,
   unlisted,
