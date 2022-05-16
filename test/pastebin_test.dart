@@ -2,7 +2,7 @@ import 'package:http/http.dart';
 import 'package:pastebin/pastebin.dart';
 import 'package:pastebin/src/official_pastebin_client.dart';
 import 'package:test/test.dart';
-import 'package:mockito/mockito.dart';
+import 'package:mocktail/mocktail.dart';
 
 class MockHttpClient extends Mock implements Client {}
 
@@ -291,7 +291,7 @@ void main() {
       test(
         '''maps a NetworkError object in the right hand if http.Client.get throws an error''',
         () async {
-          when(mockHttpClient.get(any)).thenThrow('connection issue');
+          when(() => mockHttpClient.get(any())).thenThrow('connection issue');
 
           final result = await singleOfficialPastebinClient.apiRequest(
             body: {},
@@ -308,10 +308,10 @@ void main() {
         '''maps a NetworkError object in the right hand if http.Client.post throws an error''',
         () async {
           when(
-            mockHttpClient.post(
-              any,
-              body: anyNamed('body'),
-              encoding: anyNamed('encoding'),
+            () => mockHttpClient.post(
+              any(),
+              body: any(named: 'body'),
+              encoding: any(named: 'encoding'),
             ),
           ).thenThrow('connection issue');
 
@@ -337,10 +337,10 @@ void main() {
           );
 
           when(
-            mockHttpClient.post(
-              any,
-              body: anyNamed('body'),
-              encoding: anyNamed('encoding'),
+            () => mockHttpClient.post(
+              any(),
+              body: any(named: 'body'),
+              encoding: any(named: 'encoding'),
             ),
           ).thenAnswer(
             (_) => Future.value(response),
@@ -352,10 +352,10 @@ void main() {
           );
 
           verify(
-            mockHttpClient.post(
-              any,
-              body: anyNamed('body'),
-              encoding: anyNamed('encoding'),
+            () => mockHttpClient.post(
+              any(),
+              body: any(named: 'body'),
+              encoding: any(named: 'encoding'),
             ),
           ).called(1);
         },
@@ -370,10 +370,10 @@ void main() {
           );
 
           when(
-            mockHttpClient.post(
-              any,
-              body: anyNamed('body'),
-              encoding: anyNamed('encoding'),
+            () => mockHttpClient.post(
+              any(),
+              body: any(named: 'body'),
+              encoding: any(named: 'encoding'),
             ),
           ).thenAnswer(
             (_) => Future.value(response),
@@ -385,10 +385,10 @@ void main() {
           );
 
           verify(
-            mockHttpClient.post(
-              any,
-              body: anyNamed('body'),
-              encoding: anyNamed('encoding'),
+            () => mockHttpClient.post(
+              any(),
+              body: any(named: 'body'),
+              encoding: any(named: 'encoding'),
             ),
           ).called(2);
         },
@@ -403,10 +403,10 @@ void main() {
           );
 
           when(
-            mockHttpClient.post(
-              any,
-              body: anyNamed('body'),
-              encoding: anyNamed('encoding'),
+            () => mockHttpClient.post(
+              any(),
+              body: any(named: 'body'),
+              encoding: any(named: 'encoding'),
             ),
           ).thenAnswer(
             (_) => Future.value(response),
@@ -418,10 +418,10 @@ void main() {
           );
 
           verify(
-            mockHttpClient.post(
-              any,
-              body: anyNamed('body'),
-              encoding: anyNamed('encoding'),
+            () => mockHttpClient.post(
+              any(),
+              body: any(named: 'body'),
+              encoding: any(named: 'encoding'),
             ),
           ).called(3);
         },
@@ -433,7 +433,7 @@ void main() {
           final response = Response('', 200);
 
           when(
-            mockHttpClient.get(any),
+            () => mockHttpClient.get(any()),
           ).thenAnswer(
             (_) => Future.value(response),
           );
@@ -443,7 +443,7 @@ void main() {
             apiOption: ApiOption.rawPaste,
           );
 
-          verify(mockHttpClient.get(any)).called(1);
+          verify(() => mockHttpClient.get(any())).called(1);
         },
       );
     },

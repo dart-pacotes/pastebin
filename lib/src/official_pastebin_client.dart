@@ -186,10 +186,10 @@ class OfficialPastebinClient extends PastebinClient {
       http.Response response;
 
       if (apiOption == ApiOption.rawPaste) {
-        response = await _httpClient.get('$url/${body['api_paste_key']}');
+        response = await _httpClient.get(uri('$url/${body['api_paste_key']}'));
       } else {
         response = await _httpClient.post(
-          url,
+          uri(url),
           body: formMap,
           encoding: utf8,
         );
@@ -213,6 +213,11 @@ class OfficialPastebinClient extends PastebinClient {
     } on Object catch (_) {
       return Right(NetworkError());
     }
+  }
+
+  @visibleForTesting
+  Uri uri(final String url) {
+    return Uri.parse(url);
   }
 
   @visibleForTesting
