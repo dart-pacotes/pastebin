@@ -1,18 +1,18 @@
 name: pastebin
 description: A pure Dart Pastebin API Wrapper.
 version: 0.0.2
-homepage: https://github.com/freitzzz/pastebin.dart
+homepage: https://github.com/dart-pacotes/pastebin.dart
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
 
 dependencies:
-  http: ^0.12.2
-  dartz:  ^0.9.2
-  xml: ^4.5.1
-  meta: ^1.2.3
+  http: ^0.13.4
+  dartz: ^0.10.1
+  xml: ^6.0.1
+  meta: ^1.7.0
 
 dev_dependencies:
-  effective_dart: 1.2.4
-  test: 1.15.4
-  mockito: 4.1.1
+  lints: ^1.0.1
+  test: ^1.21.1
+  mocktail: ^0.3.0
