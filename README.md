@@ -46,6 +46,8 @@ Every HTTP request returns an `Either` monoid that either returns the response r
 
 The main use case that inspired the development of this package, is to provide developers (mostly indie) a way to publish and read app logs for free.
 
+---
+
 ### Bugs and Contributions
 
 Found any bug (including typos) in the package? Do you have any suggestion or feature to include for future releases? Please create an issue via GitHub in order to track each contribution. Also, pull requests are very welcome!
