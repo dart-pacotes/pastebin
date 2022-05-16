@@ -2,9 +2,13 @@ import 'package:http/http.dart';
 import 'package:pastebin/pastebin.dart';
 import 'package:pastebin/src/official_pastebin_client.dart';
 import 'package:test/test.dart';
-import 'package:mockito/mockito.dart';
+import 'package:mocktail/mocktail.dart';
 
 class MockHttpClient extends Mock implements Client {}
+
+class FakeResponse extends Fake implements Response {}
+
+class FakeUri extends Fake implements Uri {}
 
 void main() {
   final mockHttpClient = MockHttpClient();
@@ -24,37 +28,45 @@ void main() {
     httpClient: mockHttpClient,
   );
 
+  setUpAll(
+    () {
+      registerFallbackValue(
+        FakeUri(),
+      );
+    },
+  );
+
   group(
     'OfficialPastebinClient',
     () {
       test(
-        '''maps a NotFound object in the right hand if a request response status code is 404''',
+        '''maps a NotFound object in the left hand if a request response status code is 404''',
         () {
           final response = Response('', 404);
 
           final result = singleOfficialPastebinClient.mapResponse(response);
 
-          final rightHand = result.fold(null, (r) => r);
+          final leftHand = result.fold(((l) => l), (r) => FakeResponse());
 
-          expect(rightHand is NotFound, isTrue);
+          expect(leftHand is NotFound, isTrue);
         },
       );
 
       test(
-        '''maps a InvalidApiOption object in the right hand if a request response body matches "Bad API request, invalid api_option"''',
+        '''maps a InvalidApiOption object in the left hand if a request response body matches "Bad API request, invalid api_option"''',
         () {
           final response = Response('Bad API request, invalid api_option', 400);
 
           final result = singleOfficialPastebinClient.mapResponse(response);
 
-          final rightHand = result.fold(null, (r) => r);
+          final leftHand = result.fold(((l) => l), (r) => FakeResponse());
 
-          expect(rightHand is InvalidApiOption, isTrue);
+          expect(leftHand is InvalidApiOption, isTrue);
         },
       );
 
       test(
-        '''maps a InvalidApiDevKey object in the right hand if a request response body matches "Bad API request, invalid api_dev_key"''',
+        '''maps a InvalidApiDevKey object in the left hand if a request response body matches "Bad API request, invalid api_dev_key"''',
         () {
           final response = Response(
             'Bad API request, invalid api_dev_key',
@@ -63,13 +75,13 @@ void main() {
 
           final result = singleOfficialPastebinClient.mapResponse(response);
 
-          final rightHand = result.fold(null, (r) => r);
+          final leftHand = result.fold(((l) => l), (r) => FakeResponse());
 
-          expect(rightHand is InvalidApiDevKey, isTrue);
+          expect(leftHand is InvalidApiDevKey, isTrue);
         },
       );
       test(
-        '''maps a ExceededMaximumNumberOfUnlistedPastes object in the right hand if a request response body matches "Bad API request, maximum number of 25 unlisted pastes for your free account"''',
+        '''maps a ExceededMaximumNumberOfUnlistedPastes object in the left hand if a request response body matches "Bad API request, maximum number of 25 unlisted pastes for your free account"''',
         () {
           final response = Response(
             '''Bad API request, maximum number of 25 unlisted pastes for your free account''',
@@ -78,13 +90,13 @@ void main() {
 
           final result = singleOfficialPastebinClient.mapResponse(response);
 
-          final rightHand = result.fold(null, (r) => r);
+          final leftHand = result.fold(((l) => l), (r) => FakeResponse());
 
-          expect(rightHand is ExceededMaximumNumberOfUnlistedPastes, isTrue);
+          expect(leftHand is ExceededMaximumNumberOfUnlistedPastes, isTrue);
         },
       );
       test(
-        '''maps a ExceededMaximumNumberOfPrivatePastes object in the right hand if a request response body matches "Bad API request, maximum number of 10 private pastes for your free account"''',
+        '''maps a ExceededMaximumNumberOfPrivatePastes object in the left hand if a request response body matches "Bad API request, maximum number of 10 private pastes for your free account"''',
         () {
           final response = Response(
             '''Bad API request, maximum number of 10 private pastes for your free account''',
@@ -93,13 +105,13 @@ void main() {
 
           final result = singleOfficialPastebinClient.mapResponse(response);
 
-          final rightHand = result.fold(null, (r) => r);
+          final leftHand = result.fold(((l) => l), (r) => FakeResponse());
 
-          expect(rightHand is ExceededMaximumNumberOfPrivatePastes, isTrue);
+          expect(leftHand is ExceededMaximumNumberOfPrivatePastes, isTrue);
         },
       );
       test(
-        '''maps a EmptyApiPasteCode object in the right hand if a request response body matches "Bad API request, api_paste_code was empty"''',
+        '''maps a EmptyApiPasteCode object in the left hand if a request response body matches "Bad API request, api_paste_code was empty"''',
         () {
           final response = Response(
             'Bad API request, api_paste_code was empty',
@@ -108,13 +120,13 @@ void main() {
 
           final result = singleOfficialPastebinClient.mapResponse(response);
 
-          final rightHand = result.fold(null, (r) => r);
+          final leftHand = result.fold(((l) => l), (r) => FakeResponse());
 
-          expect(rightHand is EmptyApiPasteCode, isTrue);
+          expect(leftHand is EmptyApiPasteCode, isTrue);
         },
       );
       test(
-        '''maps a ExceededMaximumPasteFileSize object in the right hand if a request response body matches "Bad API request, maximum paste file size exceeded"''',
+        '''maps a ExceededMaximumPasteFileSize object in the left hand if a request response body matches "Bad API request, maximum paste file size exceeded"''',
         () {
           final response = Response(
             'Bad API request, maximum paste file size exceeded',
@@ -123,13 +135,13 @@ void main() {
 
           final result = singleOfficialPastebinClient.mapResponse(response);
 
-          final rightHand = result.fold(null, (r) => r);
+          final leftHand = result.fold(((l) => l), (r) => FakeResponse());
 
-          expect(rightHand is ExceededMaximumPasteFileSize, isTrue);
+          expect(leftHand is ExceededMaximumPasteFileSize, isTrue);
         },
       );
       test(
-        '''maps a InvalidApiPasteExpireDate object in the right hand if a request response body matches "Bad API request, invalid api_paste_expire_date"''',
+        '''maps a InvalidApiPasteExpireDate object in the left hand if a request response body matches "Bad API request, invalid api_paste_expire_date"''',
         () {
           final response = Response(
             'Bad API request, invalid api_paste_expire_date',
@@ -138,13 +150,13 @@ void main() {
 
           final result = singleOfficialPastebinClient.mapResponse(response);
 
-          final rightHand = result.fold(null, (r) => r);
+          final leftHand = result.fold(((l) => l), (r) => FakeResponse());
 
-          expect(rightHand is InvalidApiPasteExpireDate, isTrue);
+          expect(leftHand is InvalidApiPasteExpireDate, isTrue);
         },
       );
       test(
-        '''maps a InvalidApiPasteVisibility object in the right hand if a request response body matches "Bad API request, invalid api_paste_private"''',
+        '''maps a InvalidApiPasteVisibility object in the left hand if a request response body matches "Bad API request, invalid api_paste_private"''',
         () {
           final response = Response(
             'Bad API request, invalid api_paste_private',
@@ -153,13 +165,13 @@ void main() {
 
           final result = singleOfficialPastebinClient.mapResponse(response);
 
-          final rightHand = result.fold(null, (r) => r);
+          final leftHand = result.fold(((l) => l), (r) => FakeResponse());
 
-          expect(rightHand is InvalidApiPasteVisibility, isTrue);
+          expect(leftHand is InvalidApiPasteVisibility, isTrue);
         },
       );
       test(
-        '''maps a InvalidApiPasteFormat object in the right hand if a request response body matches "Bad API request, invalid api_paste_format"''',
+        '''maps a InvalidApiPasteFormat object in the left hand if a request response body matches "Bad API request, invalid api_paste_format"''',
         () {
           final response = Response(
             'Bad API request, invalid api_paste_format',
@@ -168,13 +180,13 @@ void main() {
 
           final result = singleOfficialPastebinClient.mapResponse(response);
 
-          final rightHand = result.fold(null, (r) => r);
+          final leftHand = result.fold(((l) => l), (r) => FakeResponse());
 
-          expect(rightHand is InvalidApiPasteFormat, isTrue);
+          expect(leftHand is InvalidApiPasteFormat, isTrue);
         },
       );
       test(
-        '''maps a InvalidApiUserKey object in the right hand if a request response body matches "Bad API request, invalid api_user_key"''',
+        '''maps a InvalidApiUserKey object in the left hand if a request response body matches "Bad API request, invalid api_user_key"''',
         () {
           final response = Response(
             'Bad API request, invalid api_user_key',
@@ -183,13 +195,13 @@ void main() {
 
           final result = singleOfficialPastebinClient.mapResponse(response);
 
-          final rightHand = result.fold(null, (r) => r);
+          final leftHand = result.fold(((l) => l), (r) => FakeResponse());
 
-          expect(rightHand is InvalidApiUserKey, isTrue);
+          expect(leftHand is InvalidApiUserKey, isTrue);
         },
       );
       test(
-        '''maps a ExpiredUserKey object in the right hand if a request response body matches "Bad API request, invalid or expired api_user_key"''',
+        '''maps a ExpiredUserKey object in the left hand if a request response body matches "Bad API request, invalid or expired api_user_key"''',
         () {
           final response = Response(
             'Bad API request, invalid or expired api_user_key',
@@ -198,13 +210,13 @@ void main() {
 
           final result = singleOfficialPastebinClient.mapResponse(response);
 
-          final rightHand = result.fold(null, (r) => r);
+          final leftHand = result.fold(((l) => l), (r) => FakeResponse());
 
-          expect(rightHand is ExpiredUserKey, isTrue);
+          expect(leftHand is ExpiredUserKey, isTrue);
         },
       );
       test(
-        '''maps a InvalidRequestVerb object in the right hand if a request response body matches "Bad API request, use POST request, not GET"''',
+        '''maps a InvalidRequestVerb object in the left hand if a request response body matches "Bad API request, use POST request, not GET"''',
         () {
           final response = Response(
             'Bad API request, use POST request, not GET',
@@ -213,37 +225,37 @@ void main() {
 
           final result = singleOfficialPastebinClient.mapResponse(response);
 
-          final rightHand = result.fold(null, (r) => r);
+          final leftHand = result.fold(((l) => l), (r) => FakeResponse());
 
-          expect(rightHand is InvalidRequestVerb, isTrue);
+          expect(leftHand is InvalidRequestVerb, isTrue);
         },
       );
       test(
-        '''maps a InvalidUserCredentials object in the right hand if a request response body matches "Bad API request, invalid login"''',
+        '''maps a InvalidUserCredentials object in the left hand if a request response body matches "Bad API request, invalid login"''',
         () {
           final response = Response('Bad API request, invalid login', 400);
 
           final result = singleOfficialPastebinClient.mapResponse(response);
 
-          final rightHand = result.fold(null, (r) => r);
+          final leftHand = result.fold(((l) => l), (r) => FakeResponse());
 
-          expect(rightHand is InvalidUserCredentials, isTrue);
+          expect(leftHand is InvalidUserCredentials, isTrue);
         },
       );
       test(
-        '''maps a AccountNotActive object in the right hand if a request response body matches "Bad API request, account not active"''',
+        '''maps a AccountNotActive object in the left hand if a request response body matches "Bad API request, account not active"''',
         () {
           final response = Response('Bad API request, account not active', 400);
 
           final result = singleOfficialPastebinClient.mapResponse(response);
 
-          final rightHand = result.fold(null, (r) => r);
+          final leftHand = result.fold(((l) => l), (r) => FakeResponse());
 
-          expect(rightHand is AccountNotActive, isTrue);
+          expect(leftHand is AccountNotActive, isTrue);
         },
       );
       test(
-        '''maps a InvalidParameters object in the right hand if a request response body matches "Bad API request, invalid POST parameters"''',
+        '''maps a InvalidParameters object in the left hand if a request response body matches "Bad API request, invalid POST parameters"''',
         () {
           final response = Response(
             'Bad API request, invalid POST parameters',
@@ -252,13 +264,13 @@ void main() {
 
           final result = singleOfficialPastebinClient.mapResponse(response);
 
-          final rightHand = result.fold(null, (r) => r);
+          final leftHand = result.fold(((l) => l), (r) => FakeResponse());
 
-          expect(rightHand is InvalidParameters, isTrue);
+          expect(leftHand is InvalidParameters, isTrue);
         },
       );
       test(
-        '''maps a InsufficientPermissions object in the right hand if a request response body matches "Bad API request, invalid permission to remove paste"''',
+        '''maps a InsufficientPermissions object in the left hand if a request response body matches "Bad API request, invalid permission to remove paste"''',
         () {
           final response = Response(
             'Bad API request, invalid permission to remove paste',
@@ -267,13 +279,13 @@ void main() {
 
           final result = singleOfficialPastebinClient.mapResponse(response);
 
-          final rightHand = result.fold(null, (r) => r);
+          final leftHand = result.fold(((l) => l), (r) => FakeResponse());
 
-          expect(rightHand is InsufficientPermissions, isTrue);
+          expect(leftHand is InsufficientPermissions, isTrue);
         },
       );
       test(
-        '''maps a InsufficientPermissions object in the right hand if a request response body matches "Bad API request, invalid permission to view this paste or invalid api_paste_key"''',
+        '''maps a InsufficientPermissions object in the left hand if a request response body matches "Bad API request, invalid permission to view this paste or invalid api_paste_key"''',
         () {
           final response = Response(
             '''Bad API request, invalid permission to view this paste or invalid api_paste_key''',
@@ -282,36 +294,36 @@ void main() {
 
           final result = singleOfficialPastebinClient.mapResponse(response);
 
-          final rightHand = result.fold(null, (r) => r);
+          final leftHand = result.fold(((l) => l), (r) => FakeResponse());
 
-          expect(rightHand is InsufficientPermissions, isTrue);
+          expect(leftHand is InsufficientPermissions, isTrue);
         },
       );
 
       test(
-        '''maps a NetworkError object in the right hand if http.Client.get throws an error''',
+        '''maps a NetworkError object in the left hand if http.Client.get throws an error''',
         () async {
-          when(mockHttpClient.get(any)).thenThrow('connection issue');
+          when(() => mockHttpClient.get(any())).thenThrow('connection issue');
 
           final result = await singleOfficialPastebinClient.apiRequest(
             body: {},
             apiOption: ApiOption.rawPaste,
           );
 
-          final rightHand = result.fold(null, (r) => r);
+          final leftHand = result.fold(((l) => l), (r) => FakeResponse());
 
-          expect(rightHand is NetworkError, isTrue);
+          expect(leftHand is NetworkError, isTrue);
         },
       );
 
       test(
-        '''maps a NetworkError object in the right hand if http.Client.post throws an error''',
+        '''maps a NetworkError object in the left hand if http.Client.post throws an error''',
         () async {
           when(
-            mockHttpClient.post(
-              any,
-              body: anyNamed('body'),
-              encoding: anyNamed('encoding'),
+            () => mockHttpClient.post(
+              any(),
+              body: any(named: 'body'),
+              encoding: any(named: 'encoding'),
             ),
           ).thenThrow('connection issue');
 
@@ -320,9 +332,9 @@ void main() {
             apiOption: ApiOption.deletePaste,
           );
 
-          final rightHand = result.fold(null, (r) => r);
+          final leftHand = result.fold(((l) => l), (r) => FakeResponse());
 
-          expect(rightHand is NetworkError, isTrue);
+          expect(leftHand is NetworkError, isTrue);
 
           reset(mockHttpClient);
         },
@@ -337,10 +349,10 @@ void main() {
           );
 
           when(
-            mockHttpClient.post(
-              any,
-              body: anyNamed('body'),
-              encoding: anyNamed('encoding'),
+            () => mockHttpClient.post(
+              any(),
+              body: any(named: 'body'),
+              encoding: any(named: 'encoding'),
             ),
           ).thenAnswer(
             (_) => Future.value(response),
@@ -352,17 +364,17 @@ void main() {
           );
 
           verify(
-            mockHttpClient.post(
-              any,
-              body: anyNamed('body'),
-              encoding: anyNamed('encoding'),
+            () => mockHttpClient.post(
+              any(),
+              body: any(named: 'body'),
+              encoding: any(named: 'encoding'),
             ),
           ).called(1);
         },
       );
 
       test(
-        '''retries the api request with a new api dev key if more than one api dev key is provided and the mapped response if a right hand with ExceededMaximumNumberOfPrivatePastes object''',
+        '''retries the api request with a new api dev key if more than one api dev key is provided and the mapped response if a left hand with ExceededMaximumNumberOfPrivatePastes object''',
         () async {
           final response = Response(
             '''Bad API request, maximum number of 10 private pastes for your free account''',
@@ -370,10 +382,10 @@ void main() {
           );
 
           when(
-            mockHttpClient.post(
-              any,
-              body: anyNamed('body'),
-              encoding: anyNamed('encoding'),
+            () => mockHttpClient.post(
+              any(),
+              body: any(named: 'body'),
+              encoding: any(named: 'encoding'),
             ),
           ).thenAnswer(
             (_) => Future.value(response),
@@ -385,17 +397,17 @@ void main() {
           );
 
           verify(
-            mockHttpClient.post(
-              any,
-              body: anyNamed('body'),
-              encoding: anyNamed('encoding'),
+            () => mockHttpClient.post(
+              any(),
+              body: any(named: 'body'),
+              encoding: any(named: 'encoding'),
             ),
           ).called(2);
         },
       );
 
       test(
-        '''retries the api request with a new api dev key if more than one api dev key is provided and the mapped response if a right hand with ExceededMaximumNumberOfUnlistedPastes object''',
+        '''retries the api request with a new api dev key if more than one api dev key is provided and the mapped response if a left hand with ExceededMaximumNumberOfUnlistedPastes object''',
         () async {
           final response = Response(
             '''Bad API request, maximum number of 25 unlisted pastes for your free account''',
@@ -403,10 +415,10 @@ void main() {
           );
 
           when(
-            mockHttpClient.post(
-              any,
-              body: anyNamed('body'),
-              encoding: anyNamed('encoding'),
+            () => mockHttpClient.post(
+              any(),
+              body: any(named: 'body'),
+              encoding: any(named: 'encoding'),
             ),
           ).thenAnswer(
             (_) => Future.value(response),
@@ -418,10 +430,10 @@ void main() {
           );
 
           verify(
-            mockHttpClient.post(
-              any,
-              body: anyNamed('body'),
-              encoding: anyNamed('encoding'),
+            () => mockHttpClient.post(
+              any(),
+              body: any(named: 'body'),
+              encoding: any(named: 'encoding'),
             ),
           ).called(3);
         },
@@ -433,7 +445,7 @@ void main() {
           final response = Response('', 200);
 
           when(
-            mockHttpClient.get(any),
+            () => mockHttpClient.get(any()),
           ).thenAnswer(
             (_) => Future.value(response),
           );
@@ -443,7 +455,7 @@ void main() {
             apiOption: ApiOption.rawPaste,
           );
 
-          verify(mockHttpClient.get(any)).called(1);
+          verify(() => mockHttpClient.get(any())).called(1);
         },
       );
     },

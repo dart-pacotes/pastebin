@@ -1,11 +1,10 @@
 name: example
 version: 1.0.0
+publish_to: none
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
 
-dependencies:  
+dependencies:
   pastebin:
     path: ../
-
-dev_dependencies:

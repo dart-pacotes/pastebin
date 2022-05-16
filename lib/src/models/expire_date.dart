@@ -12,7 +12,7 @@ enum ExpireDate {
   oneYear,
 }
 
-extension ExpireDateExtension on ExpireDate {
+extension ExpireDateExtension on ExpireDate? {
   static const Map<ExpireDate, String> values = {
     ExpireDate.never: 'N',
     ExpireDate.tenMinutes: '10M',
@@ -25,18 +25,19 @@ extension ExpireDateExtension on ExpireDate {
   };
 
   static ExpireDate parse(
-    final String expireDate,
-    final MapEntry<ExpireDate, String> Function() onError,
+    final String? expireDate,
+    final MapEntry<ExpireDate, String>? Function() onError,
   ) {
     return values.entries
-        .firstWhere((entry) => entry.value == expireDate, orElse: onError)
+        .firstWhere((entry) => entry.value == expireDate,
+            orElse: onError as MapEntry<ExpireDate, String> Function()?)
         .key;
   }
 
-  static ExpireDate tryParse(final String expireDate) =>
+  static ExpireDate tryParse(final String? expireDate) =>
       parse(expireDate, () => null);
 
-  String value() {
-    return values[this];
+  String? value() {
+    return values[this!];
   }
 }

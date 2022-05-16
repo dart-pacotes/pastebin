@@ -1,5 +1,4 @@
 import 'package:http/http.dart' as http;
-import 'package:meta/meta.dart';
 
 import 'official_pastebin_client.dart';
 import 'pastebin_client.dart';
@@ -9,7 +8,7 @@ import 'pastebin_client.dart';
 /// takes on a single Pastebin API developer key.
 ///
 PastebinClient withSingleApiDevKey({
-  @required final String apiDevKey,
+  required final String apiDevKey,
 }) {
   return OfficialPastebinClient(
     apiDevKeys: [apiDevKey],
@@ -26,7 +25,7 @@ PastebinClient withSingleApiDevKey({
 /// the request is resent with a different api dev key.
 ///
 PastebinClient withMultipleApiDevKey({
-  @required final List<String> apiDevKeys,
+  required final List<String> apiDevKeys,
 }) {
   return OfficialPastebinClient(
     apiDevKeys: apiDevKeys,

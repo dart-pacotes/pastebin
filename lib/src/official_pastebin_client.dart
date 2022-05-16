@@ -14,17 +14,17 @@ class OfficialPastebinClient extends PastebinClient {
   final http.Client _httpClient;
 
   OfficialPastebinClient({
-    @required final List<String> apiDevKeys,
-    @required final http.Client httpClient,
+    required final List<String> apiDevKeys,
+    required final http.Client httpClient,
   })  : _apiDevKeys = List.from(apiDevKeys, growable: true),
         _httpClient = httpClient;
 
   @override
-  Future<Either<String, RequestError>> apiUserKey({
-    final String username,
-    final String password,
+  Future<Either<RequestError, String>> apiUserKey({
+    final String? username,
+    final String? password,
   }) async {
-    final body = <String, String>{
+    final body = <String, String?>{
       'api_user_name': username,
       'api_user_password': password,
     };
@@ -35,17 +35,17 @@ class OfficialPastebinClient extends PastebinClient {
     );
 
     return response.fold(
-      (l) => Left(l.body),
-      (r) => Right(r),
+      (l) => Left(l),
+      (r) => Right(r.body),
     );
   }
 
   @override
-  Future<Either<void, RequestError>> delete({
-    final String pasteKey,
-    final String userKey,
+  Future<Either<RequestError, void>> delete({
+    final String? pasteKey,
+    final String? userKey,
   }) {
-    final body = <String, String>{
+    final body = <String, String?>{
       'api_user_key': userKey,
       'api_paste_key': userKey,
     };
@@ -57,11 +57,11 @@ class OfficialPastebinClient extends PastebinClient {
   }
 
   @override
-  Future<Either<Uri, RequestError>> paste({
-    @required final String pasteText,
-    final PasteOptions options,
+  Future<Either<RequestError, Uri>> paste({
+    required final String pasteText,
+    final PasteOptions? options,
   }) async {
-    final body = <String, String>{
+    final body = <String, String?>{
       'api_paste_code': pasteText,
     };
 
@@ -85,14 +85,14 @@ class OfficialPastebinClient extends PastebinClient {
     );
 
     return response.fold(
-      (l) => Left(Uri.parse(l.body)),
-      (r) => Right(r),
+      (l) => Left(l),
+      (r) => Right(Uri.parse(r.body)),
     );
   }
 
   @override
-  Future<Either<List<Paste>, RequestError>> pastes({
-    final String userKey,
+  Future<Either<RequestError, List<Paste>>> pastes({
+    final String? userKey,
     final int limit = 50,
   }) async {
     final body = <String, String>{
@@ -106,22 +106,22 @@ class OfficialPastebinClient extends PastebinClient {
     );
 
     return response.fold(
-      (l) => Left(
+      (l) => Left(l),
+      (r) => Right(
         Paste.fromXmlDocument(
-          XmlDocument.parse(l.body),
+          XmlDocument.parse(r.body),
         ),
       ),
-      (r) => Right(r),
     );
   }
 
   @override
-  Future<Either<String, RequestError>> rawPaste({
-    @required final String pasteKey,
-    @required final Visibility visibility,
-    final String userKey,
+  Future<Either<RequestError, String>> rawPaste({
+    required final String pasteKey,
+    required final Visibility visibility,
+    final String? userKey,
   }) async {
-    final body = <String, String>{
+    final body = <String, String?>{
       'api_paste_key': pasteKey,
     };
 
@@ -139,16 +139,16 @@ class OfficialPastebinClient extends PastebinClient {
     );
 
     return response.fold(
-      (l) => Left(l.body),
-      (r) => Right(r),
+      (l) => Left(l),
+      (r) => Right(r.body),
     );
   }
 
   @override
-  Future<Either<UserInfo, RequestError>> userInfo({
-    final String userKey,
+  Future<Either<RequestError, UserInfo>> userInfo({
+    final String? userKey,
   }) async {
-    final body = <String, String>{
+    final body = <String, String?>{
       'api_user_key': userKey,
     };
 
@@ -158,26 +158,26 @@ class OfficialPastebinClient extends PastebinClient {
     );
 
     return response.fold(
-      (l) => Left(
+      (l) => Left(l),
+      (r) => Right(
         UserInfo.fromXmlNode(
-          XmlDocument.parse(l.body).getElement('user'),
+          XmlDocument.parse(r.body).getElement('user')!,
         ),
       ),
-      (r) => Right(r),
     );
   }
 
   String get apiDevKey => _apiDevKeys.first;
 
   @visibleForTesting
-  Future<Either<http.Response, RequestError>> apiRequest({
-    @required final Map<String, String> body,
-    @required final ApiOption apiOption,
+  Future<Either<RequestError, http.Response>> apiRequest({
+    required final Map<String, String?> body,
+    required final ApiOption apiOption,
   }) async {
     try {
       final url = apiOption.url();
 
-      final formMap = <String, String>{
+      final formMap = <String, String?>{
         'api_option': apiOption.value(),
         'api_dev_key': apiDevKey,
         ...body
@@ -186,80 +186,85 @@ class OfficialPastebinClient extends PastebinClient {
       http.Response response;
 
       if (apiOption == ApiOption.rawPaste) {
-        response = await _httpClient.get('$url/${body['api_paste_key']}');
+        response = await _httpClient.get(uri('$url/${body['api_paste_key']}'));
       } else {
         response = await _httpClient.post(
-          url,
+          uri(url),
           body: formMap,
           encoding: utf8,
         );
       }
 
       return mapResponse(response).fold(
-        (l) => Left(l),
-        (r) {
+        (l) {
           if (_apiDevKeys.length > 1) {
-            if (r is ExceededMaximumNumberOfPrivatePastes ||
-                r is ExceededMaximumNumberOfUnlistedPastes ||
-                r is InvalidApiDevKey) {
+            if (l is ExceededMaximumNumberOfPrivatePastes ||
+                l is ExceededMaximumNumberOfUnlistedPastes ||
+                l is InvalidApiDevKey) {
               _apiDevKeys.removeAt(0);
 
               return apiRequest(body: body, apiOption: apiOption);
             }
           }
-          return Right(r);
+          return Left(l);
         },
+        (r) => Right(r),
       );
     } on Object catch (_) {
-      return Right(NetworkError());
+      return Left(NetworkError());
     }
   }
 
   @visibleForTesting
-  Either<http.Response, RequestError> mapResponse(
+  Uri uri(final String url) {
+    return Uri.parse(url);
+  }
+
+  @visibleForTesting
+  Either<RequestError, http.Response> mapResponse(
     final http.Response response,
   ) {
     if (response.statusCode == 404) {
-      return Right(NotFound());
+      return Left(NotFound());
     }
 
     switch (response.body) {
       case 'Bad API request, invalid api_option':
-        return Right(InvalidApiOption());
+        return Left(InvalidApiOption());
       case 'Bad API request, invalid api_dev_key':
-        return Right(InvalidApiDevKey());
+        return Left(InvalidApiDevKey());
       case '''Bad API request, maximum number of 25 unlisted pastes for your free account''':
-        return Right(ExceededMaximumNumberOfUnlistedPastes());
+        return Left(ExceededMaximumNumberOfUnlistedPastes());
       case '''Bad API request, maximum number of 10 private pastes for your free account''':
-        return Right(ExceededMaximumNumberOfPrivatePastes());
+        return Left(ExceededMaximumNumberOfPrivatePastes());
       case 'Bad API request, api_paste_code was empty':
-        return Right(EmptyApiPasteCode());
+        return Left(EmptyApiPasteCode());
       case 'Bad API request, maximum paste file size exceeded':
-        return Right(ExceededMaximumPasteFileSize());
+        return Left(ExceededMaximumPasteFileSize());
       case 'Bad API request, invalid api_paste_expire_date':
-        return Right(InvalidApiPasteExpireDate());
+        return Left(InvalidApiPasteExpireDate());
       case 'Bad API request, invalid api_paste_private':
-        return Right(InvalidApiPasteVisibility());
+        return Left(InvalidApiPasteVisibility());
       case 'Bad API request, invalid api_paste_format':
-        return Right(InvalidApiPasteFormat());
+        return Left(InvalidApiPasteFormat());
       case 'Bad API request, invalid api_user_key':
-        return Right(InvalidApiUserKey());
+        return Left(InvalidApiUserKey());
       case 'Bad API request, invalid or expired api_user_key':
-        return Right(ExpiredUserKey());
+        return Left(ExpiredUserKey());
       case 'Bad API request, use POST request, not GET':
-        return Right(InvalidRequestVerb());
+        return Left(InvalidRequestVerb());
       case 'Bad API request, invalid login':
-        return Right(InvalidUserCredentials());
+        return Left(InvalidUserCredentials());
       case 'Bad API request, account not active':
-        return Right(AccountNotActive());
+        return Left(AccountNotActive());
       case 'Bad API request, invalid POST parameters':
-        return Right(InvalidParameters());
+        return Left(InvalidParameters());
       case 'Bad API request, invalid permission to remove paste':
-        return Right(InsufficientPermissions());
+        return Left(InsufficientPermissions());
       case '''Bad API request, invalid permission to view this paste or invalid api_paste_key''':
-        return Right(InsufficientPermissions());
+        return Left(InsufficientPermissions());
       default:
-        return Left(response);
+        return Right(response);
     }
   }
 }

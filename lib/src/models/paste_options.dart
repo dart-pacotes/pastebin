@@ -6,15 +6,15 @@ import 'visibility.dart';
 /// Model for available settings of a [Paste] that can be set
 ///
 class PasteOptions {
-  final String apiUserKey;
+  final String? apiUserKey;
 
-  final String pasteName;
+  final String? pasteName;
 
-  final Format pasteFormat;
+  final Format? pasteFormat;
 
-  final Visibility pasteVisiblity;
+  final Visibility? pasteVisiblity;
 
-  final ExpireDate pasteExpireDate;
+  final ExpireDate? pasteExpireDate;
 
   const PasteOptions({
     this.apiUserKey,
