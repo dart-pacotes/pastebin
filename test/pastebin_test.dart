@@ -6,6 +6,10 @@ import 'package:mocktail/mocktail.dart';
 
 class MockHttpClient extends Mock implements Client {}
 
+class FakeResponse extends Fake implements Response {}
+
+class FakeUri extends Fake implements Uri {}
+
 void main() {
   final mockHttpClient = MockHttpClient();
 
@@ -24,6 +28,14 @@ void main() {
     httpClient: mockHttpClient,
   );
 
+  setUpAll(
+    () {
+      registerFallbackValue(
+        FakeUri(),
+      );
+    },
+  );
+
   group(
     'OfficialPastebinClient',
     () {
@@ -34,7 +46,7 @@ void main() {
 
           final result = singleOfficialPastebinClient.mapResponse(response);
 
-          final rightHand = result.fold(null, (r) => r);
+          final rightHand = result.fold(((l) => FakeResponse()), (r) => r);
 
           expect(rightHand is NotFound, isTrue);
         },
@@ -47,7 +59,7 @@ void main() {
 
           final result = singleOfficialPastebinClient.mapResponse(response);
 
-          final rightHand = result.fold(null, (r) => r);
+          final rightHand = result.fold(((l) => FakeResponse()), (r) => r);
 
           expect(rightHand is InvalidApiOption, isTrue);
         },
@@ -63,7 +75,7 @@ void main() {
 
           final result = singleOfficialPastebinClient.mapResponse(response);
 
-          final rightHand = result.fold(null, (r) => r);
+          final rightHand = result.fold(((l) => FakeResponse()), (r) => r);
 
           expect(rightHand is InvalidApiDevKey, isTrue);
         },
@@ -78,7 +90,7 @@ void main() {
 
           final result = singleOfficialPastebinClient.mapResponse(response);
 
-          final rightHand = result.fold(null, (r) => r);
+          final rightHand = result.fold(((l) => FakeResponse()), (r) => r);
 
           expect(rightHand is ExceededMaximumNumberOfUnlistedPastes, isTrue);
         },
@@ -93,7 +105,7 @@ void main() {
 
           final result = singleOfficialPastebinClient.mapResponse(response);
 
-          final rightHand = result.fold(null, (r) => r);
+          final rightHand = result.fold(((l) => FakeResponse()), (r) => r);
 
           expect(rightHand is ExceededMaximumNumberOfPrivatePastes, isTrue);
         },
@@ -108,7 +120,7 @@ void main() {
 
           final result = singleOfficialPastebinClient.mapResponse(response);
 
-          final rightHand = result.fold(null, (r) => r);
+          final rightHand = result.fold(((l) => FakeResponse()), (r) => r);
 
           expect(rightHand is EmptyApiPasteCode, isTrue);
         },
@@ -123,7 +135,7 @@ void main() {
 
           final result = singleOfficialPastebinClient.mapResponse(response);
 
-          final rightHand = result.fold(null, (r) => r);
+          final rightHand = result.fold(((l) => FakeResponse()), (r) => r);
 
           expect(rightHand is ExceededMaximumPasteFileSize, isTrue);
         },
@@ -138,7 +150,7 @@ void main() {
 
           final result = singleOfficialPastebinClient.mapResponse(response);
 
-          final rightHand = result.fold(null, (r) => r);
+          final rightHand = result.fold(((l) => FakeResponse()), (r) => r);
 
           expect(rightHand is InvalidApiPasteExpireDate, isTrue);
         },
@@ -153,7 +165,7 @@ void main() {
 
           final result = singleOfficialPastebinClient.mapResponse(response);
 
-          final rightHand = result.fold(null, (r) => r);
+          final rightHand = result.fold(((l) => FakeResponse()), (r) => r);
 
           expect(rightHand is InvalidApiPasteVisibility, isTrue);
         },
@@ -168,7 +180,7 @@ void main() {
 
           final result = singleOfficialPastebinClient.mapResponse(response);
 
-          final rightHand = result.fold(null, (r) => r);
+          final rightHand = result.fold(((l) => FakeResponse()), (r) => r);
 
           expect(rightHand is InvalidApiPasteFormat, isTrue);
         },
@@ -183,7 +195,7 @@ void main() {
 
           final result = singleOfficialPastebinClient.mapResponse(response);
 
-          final rightHand = result.fold(null, (r) => r);
+          final rightHand = result.fold(((l) => FakeResponse()), (r) => r);
 
           expect(rightHand is InvalidApiUserKey, isTrue);
         },
@@ -198,7 +210,7 @@ void main() {
 
           final result = singleOfficialPastebinClient.mapResponse(response);
 
-          final rightHand = result.fold(null, (r) => r);
+          final rightHand = result.fold(((l) => FakeResponse()), (r) => r);
 
           expect(rightHand is ExpiredUserKey, isTrue);
         },
@@ -213,7 +225,7 @@ void main() {
 
           final result = singleOfficialPastebinClient.mapResponse(response);
 
-          final rightHand = result.fold(null, (r) => r);
+          final rightHand = result.fold(((l) => FakeResponse()), (r) => r);
 
           expect(rightHand is InvalidRequestVerb, isTrue);
         },
@@ -225,7 +237,7 @@ void main() {
 
           final result = singleOfficialPastebinClient.mapResponse(response);
 
-          final rightHand = result.fold(null, (r) => r);
+          final rightHand = result.fold(((l) => FakeResponse()), (r) => r);
 
           expect(rightHand is InvalidUserCredentials, isTrue);
         },
@@ -237,7 +249,7 @@ void main() {
 
           final result = singleOfficialPastebinClient.mapResponse(response);
 
-          final rightHand = result.fold(null, (r) => r);
+          final rightHand = result.fold(((l) => FakeResponse()), (r) => r);
 
           expect(rightHand is AccountNotActive, isTrue);
         },
@@ -252,7 +264,7 @@ void main() {
 
           final result = singleOfficialPastebinClient.mapResponse(response);
 
-          final rightHand = result.fold(null, (r) => r);
+          final rightHand = result.fold(((l) => FakeResponse()), (r) => r);
 
           expect(rightHand is InvalidParameters, isTrue);
         },
@@ -267,7 +279,7 @@ void main() {
 
           final result = singleOfficialPastebinClient.mapResponse(response);
 
-          final rightHand = result.fold(null, (r) => r);
+          final rightHand = result.fold(((l) => FakeResponse()), (r) => r);
 
           expect(rightHand is InsufficientPermissions, isTrue);
         },
@@ -282,7 +294,7 @@ void main() {
 
           final result = singleOfficialPastebinClient.mapResponse(response);
 
-          final rightHand = result.fold(null, (r) => r);
+          final rightHand = result.fold(((l) => FakeResponse()), (r) => r);
 
           expect(rightHand is InsufficientPermissions, isTrue);
         },
@@ -298,7 +310,7 @@ void main() {
             apiOption: ApiOption.rawPaste,
           );
 
-          final rightHand = result.fold(null, (r) => r);
+          final rightHand = result.fold(((l) => FakeResponse()), (r) => r);
 
           expect(rightHand is NetworkError, isTrue);
         },
@@ -320,7 +332,7 @@ void main() {
             apiOption: ApiOption.deletePaste,
           );
 
-          final rightHand = result.fold(null, (r) => r);
+          final rightHand = result.fold(((l) => FakeResponse()), (r) => r);
 
           expect(rightHand is NetworkError, isTrue);
 

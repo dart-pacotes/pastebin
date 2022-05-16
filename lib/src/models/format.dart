@@ -521,7 +521,8 @@ extension FormatExtension on Format? {
     final MapEntry<Format, String>? Function() onError,
   ) {
     return values.entries
-        .firstWhere((entry) => entry.value == format, orElse: onError as MapEntry<Format, String> Function()?)
+        .firstWhere((entry) => entry.value == format,
+            orElse: onError as MapEntry<Format, String> Function()?)
         .key;
   }
 

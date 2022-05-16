@@ -29,7 +29,8 @@ extension ExpireDateExtension on ExpireDate? {
     final MapEntry<ExpireDate, String>? Function() onError,
   ) {
     return values.entries
-        .firstWhere((entry) => entry.value == expireDate, orElse: onError as MapEntry<ExpireDate, String> Function()?)
+        .firstWhere((entry) => entry.value == expireDate,
+            orElse: onError as MapEntry<ExpireDate, String> Function()?)
         .key;
   }
 

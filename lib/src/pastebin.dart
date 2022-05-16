@@ -1,5 +1,4 @@
 import 'package:http/http.dart' as http;
-import 'package:meta/meta.dart';
 
 import 'official_pastebin_client.dart';
 import 'pastebin_client.dart';

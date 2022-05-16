@@ -19,7 +19,8 @@ extension VisibilityExtension on Visibility? {
     final MapEntry<Visibility, String>? Function() onError,
   ) {
     return values.entries
-        .firstWhere((entry) => entry.value == visibility, orElse: onError as MapEntry<Visibility, String> Function()?)
+        .firstWhere((entry) => entry.value == visibility,
+            orElse: onError as MapEntry<Visibility, String> Function()?)
         .key;
   }
 

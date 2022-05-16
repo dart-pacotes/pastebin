@@ -1,4 +1,3 @@
-import 'package:meta/meta.dart';
 import 'package:xml/xml.dart';
 
 import 'models.dart';
@@ -39,7 +38,9 @@ class UserInfo {
 
   static UserInfo fromXmlNode(final XmlNode xmlNode) {
     return UserInfo(
-      avatarUrl: Uri.tryParse(xmlNode.getElement('user_avatar_url')?.text),
+      avatarUrl: Uri.tryParse(
+        xmlNode.getElement('user_avatar_url')?.text ?? '',
+      ),
       email: xmlNode.getElement('user_email')?.text,
       expiration: ExpireDateExtension.tryParse(
         xmlNode.getElement('user_expiration')?.text,
@@ -47,7 +48,7 @@ class UserInfo {
       format: FormatExtension.tryParse(
         xmlNode.getElement('user_format_short')?.text,
       ),
-      isPro: xmlNode.getElement('user_format_short')?.text?.endsWith('1'),
+      isPro: xmlNode.getElement('user_format_short')?.text.endsWith('1'),
       location: xmlNode.getElement('user_location')?.text,
       userName: xmlNode.getElement('user_name')?.text,
       visibility: VisibilityExtension.tryParse(
