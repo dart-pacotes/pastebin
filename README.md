@@ -18,7 +18,7 @@ This package covers every endpoint disclosed in [Pastebin API documentation](htt
 
 There is also support for multiple API key ingestion, a neat feature for making sure that pastes are published, even if you are rate limited by Pastebin.
 
-```
+```dart
 // Using Official Pastebin API with a single API Dev Key
 var pastebinClient = withSingleApiDevKey(
     apiDevKey: primaryApiDevKey,
@@ -38,9 +38,9 @@ pastebinClient = withMultipleApiDevKey(
 
 ## Side Effects
 
-Powered by Dart null sound + [`dartz`](https://pub.dev/packages/dartz) monoids, this package is free of null issues and side effects. This is to prevent the throw of any exception that may not be known and caught by developers.
+Powered by Dart null sound + [`dartz`](https://pub.dev/packages/dartz) monads, this package is free of null issues and side effects. This is to prevent the throw of any exception that may not be known and caught by developers, and to make sure that information is consistent by contract.
 
-Every HTTP request returns an `Either` monoid that either returns the response result on the right hand, or `ResponseError` instance on the left hand that is typed to each possible Pastebin error (see available errors [here](https://pub.dev/documentation/pastebin/latest/pastebin/RequestError-class.html)).
+Every HTTP request returns an `Either` monad that either returns the response result on the right hand, or `ResponseError` instance on the left hand that is typed to each possible Pastebin error (see available errors [here](https://pub.dev/documentation/pastebin/latest/pastebin/RequestError-class.html)).
 
 ## Why use pastebin.dart?
 
