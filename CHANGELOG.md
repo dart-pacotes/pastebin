@@ -1,3 +1,7 @@
+## 1.0.1 - 16/05/2022
+
+* Clear API tokens and passwords.
+
 ## 1.0.0 - 16/05/2022
 
 * Migrate to null safety.

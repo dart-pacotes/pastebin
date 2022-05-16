@@ -1,6 +1,6 @@
 name: pastebin
 description: A pure Dart Pastebin API Wrapper. Allows you to interact with all Pastebin API endpoints with ease.
-version: 1.0.0
+version: 1.0.1
 homepage: https://github.com/dart-pacotes/pastebin.dart
 
 environment:
