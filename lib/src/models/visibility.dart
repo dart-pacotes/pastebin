@@ -7,7 +7,7 @@ enum Visibility {
   private,
 }
 
-extension VisibilityExtension on Visibility {
+extension VisibilityExtension on Visibility? {
   static const Map<Visibility, String> values = {
     Visibility.public: '0',
     Visibility.unlisted: '1',
@@ -15,18 +15,18 @@ extension VisibilityExtension on Visibility {
   };
 
   static Visibility parse(
-    final String visibility,
-    final MapEntry<Visibility, String> Function() onError,
+    final String? visibility,
+    final MapEntry<Visibility, String>? Function() onError,
   ) {
     return values.entries
-        .firstWhere((entry) => entry.value == visibility, orElse: onError)
+        .firstWhere((entry) => entry.value == visibility, orElse: onError as MapEntry<Visibility, String> Function()?)
         .key;
   }
 
-  static Visibility tryParse(final String visibility) =>
+  static Visibility tryParse(final String? visibility) =>
       parse(visibility, () => null);
 
-  String value() {
-    return values[this];
+  String? value() {
+    return values[this!];
   }
 }

@@ -14,17 +14,17 @@ class OfficialPastebinClient extends PastebinClient {
   final http.Client _httpClient;
 
   OfficialPastebinClient({
-    @required final List<String> apiDevKeys,
-    @required final http.Client httpClient,
+    required final List<String> apiDevKeys,
+    required final http.Client httpClient,
   })  : _apiDevKeys = List.from(apiDevKeys, growable: true),
         _httpClient = httpClient;
 
   @override
   Future<Either<String, RequestError>> apiUserKey({
-    final String username,
-    final String password,
+    final String? username,
+    final String? password,
   }) async {
-    final body = <String, String>{
+    final body = <String, String?>{
       'api_user_name': username,
       'api_user_password': password,
     };
@@ -42,10 +42,10 @@ class OfficialPastebinClient extends PastebinClient {
 
   @override
   Future<Either<void, RequestError>> delete({
-    final String pasteKey,
-    final String userKey,
+    final String? pasteKey,
+    final String? userKey,
   }) {
-    final body = <String, String>{
+    final body = <String, String?>{
       'api_user_key': userKey,
       'api_paste_key': userKey,
     };
@@ -58,10 +58,10 @@ class OfficialPastebinClient extends PastebinClient {
 
   @override
   Future<Either<Uri, RequestError>> paste({
-    @required final String pasteText,
-    final PasteOptions options,
+    required final String pasteText,
+    final PasteOptions? options,
   }) async {
-    final body = <String, String>{
+    final body = <String, String?>{
       'api_paste_code': pasteText,
     };
 
@@ -92,7 +92,7 @@ class OfficialPastebinClient extends PastebinClient {
 
   @override
   Future<Either<List<Paste>, RequestError>> pastes({
-    final String userKey,
+    final String? userKey,
     final int limit = 50,
   }) async {
     final body = <String, String>{
@@ -117,11 +117,11 @@ class OfficialPastebinClient extends PastebinClient {
 
   @override
   Future<Either<String, RequestError>> rawPaste({
-    @required final String pasteKey,
-    @required final Visibility visibility,
-    final String userKey,
+    required final String pasteKey,
+    required final Visibility visibility,
+    final String? userKey,
   }) async {
-    final body = <String, String>{
+    final body = <String, String?>{
       'api_paste_key': pasteKey,
     };
 
@@ -146,9 +146,9 @@ class OfficialPastebinClient extends PastebinClient {
 
   @override
   Future<Either<UserInfo, RequestError>> userInfo({
-    final String userKey,
+    final String? userKey,
   }) async {
-    final body = <String, String>{
+    final body = <String, String?>{
       'api_user_key': userKey,
     };
 
@@ -160,7 +160,7 @@ class OfficialPastebinClient extends PastebinClient {
     return response.fold(
       (l) => Left(
         UserInfo.fromXmlNode(
-          XmlDocument.parse(l.body).getElement('user'),
+          XmlDocument.parse(l.body).getElement('user')!,
         ),
       ),
       (r) => Right(r),
@@ -171,13 +171,13 @@ class OfficialPastebinClient extends PastebinClient {
 
   @visibleForTesting
   Future<Either<http.Response, RequestError>> apiRequest({
-    @required final Map<String, String> body,
-    @required final ApiOption apiOption,
+    required final Map<String, String?> body,
+    required final ApiOption apiOption,
   }) async {
     try {
       final url = apiOption.url();
 
-      final formMap = <String, String>{
+      final formMap = <String, String?>{
         'api_option': apiOption.value(),
         'api_dev_key': apiDevKey,
         ...body

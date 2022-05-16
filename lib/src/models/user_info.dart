@@ -7,34 +7,34 @@ import 'models.dart';
 /// Models the information and settings of Pastebin user
 ///
 class UserInfo {
-  final String userName;
+  final String? userName;
 
   final Format format;
 
   final ExpireDate expiration;
 
-  final Uri avatarUrl;
+  final Uri? avatarUrl;
 
   final Visibility visibility;
 
-  final String website;
+  final String? website;
 
-  final String email;
+  final String? email;
 
-  final String location;
+  final String? location;
 
-  final bool isPro;
+  final bool? isPro;
 
   const UserInfo({
-    @required this.avatarUrl,
-    @required this.email,
-    @required this.expiration,
-    @required this.format,
-    @required this.isPro,
-    @required this.location,
-    @required this.userName,
-    @required this.visibility,
-    @required this.website,
+    required this.avatarUrl,
+    required this.email,
+    required this.expiration,
+    required this.format,
+    required this.isPro,
+    required this.location,
+    required this.userName,
+    required this.visibility,
+    required this.website,
   });
 
   static UserInfo fromXmlNode(final XmlNode xmlNode) {

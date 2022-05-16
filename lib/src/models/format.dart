@@ -258,7 +258,7 @@ enum Format {
   zxbasic
 }
 
-extension FormatExtension on Format {
+extension FormatExtension on Format? {
   static const Map<Format, String> values = {
     Format.cs4: '4cs',
     Format.acme6502: '6502acme',
@@ -517,17 +517,17 @@ extension FormatExtension on Format {
   };
 
   static Format parse(
-    final String format,
-    final MapEntry<Format, String> Function() onError,
+    final String? format,
+    final MapEntry<Format, String>? Function() onError,
   ) {
     return values.entries
-        .firstWhere((entry) => entry.value == format, orElse: onError)
+        .firstWhere((entry) => entry.value == format, orElse: onError as MapEntry<Format, String> Function()?)
         .key;
   }
 
-  static Format tryParse(final String format) => parse(format, () => null);
+  static Format tryParse(final String? format) => parse(format, () => null);
 
-  String value() {
-    return values[this];
+  String? value() {
+    return values[this!];
   }
 }

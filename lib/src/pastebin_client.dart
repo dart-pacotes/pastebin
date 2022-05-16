@@ -19,8 +19,8 @@ abstract class PastebinClient {
   /// in the `options` field.
   ///
   Future<Either<Uri, RequestError>> paste({
-    @required final String pasteText,
-    final PasteOptions options,
+    required final String pasteText,
+    final PasteOptions? options,
   });
 
   ///
@@ -33,8 +33,8 @@ abstract class PastebinClient {
   /// used to login in Pastebin.
   ///
   Future<Either<String, RequestError>> apiUserKey({
-    @required final String username,
-    @required final String password,
+    required final String username,
+    required final String password,
   });
 
   ///
@@ -43,7 +43,7 @@ abstract class PastebinClient {
   /// than 0 can be passed.
   ///
   Future<Either<List<Paste>, RequestError>> pastes({
-    @required final String userKey,
+    required final String userKey,
     final int limit = 50,
   });
 
@@ -51,15 +51,15 @@ abstract class PastebinClient {
   /// Deletes a user paste.
   ///
   Future<Either<void, RequestError>> delete({
-    @required final String pasteKey,
-    @required final String userKey,
+    required final String pasteKey,
+    required final String userKey,
   });
 
   ///
   /// Retrieves information of a user identified by `userKey`.
   ///
   Future<Either<UserInfo, RequestError>> userInfo({
-    @required final String userKey,
+    required final String userKey,
   });
 
   ///
@@ -69,8 +69,8 @@ abstract class PastebinClient {
   /// [Visibility.unlisted].
   ///
   Future<Either<String, RequestError>> rawPaste({
-    @required final String pasteKey,
-    @required final Visibility visibility,
-    final String userKey,
+    required final String pasteKey,
+    required final Visibility visibility,
+    final String? userKey,
   });
 }
